@@ -34,6 +34,7 @@ class DetThread(QThread):
     def __int__(self):
         super(DetThread, self).__int__()
         self.source = '0'            # default input source is webcam
+        self.riskFlag = False        # trigger the risk event processing
 
     @torch.no_grad()
     def run(self,
@@ -96,6 +97,10 @@ class DetThread(QThread):
         # Run inference
         model.warmup(imgsz=(1 if pt else bs, 3, *imgsz))  # warmup
         dt, seen = [0.0, 0.0, 0.0], 0
+
+        # count the risk label
+        count = 0
+
         for path, im, im0s, vid_cap, s in dataset:
             t1 = time_sync()
             im = torch.from_numpy(im).to(device)
@@ -158,10 +163,27 @@ class DetThread(QThread):
                             c = int(cls)  # integer class
                             label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
                             annotator.box_label(xyxy, label, color=colors(c, True))
-                        if save_crop:
-                            save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
+                        # if save_crop:
+                        #     save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
 
-                # Stream results
+
+
+
+                # TODO handle the detected risk
+                if 'wearing hardhat' in s:
+                    count = count + 1
+                    print('got it')
+                else:
+                    count = 0
+
+                print(count)
+
+                if count > 100:
+                    self.riskFlag = True
+                    count = 0
+
+
+                # Stream results & send the rendered video to Qt slot
                 im0 = annotator.result()
                 if view_img:
                     # cv2.imshow(str(p), im0)
