@@ -29,10 +29,10 @@ from utils.torch_utils import select_device, time_sync
 
 class DetThread(QThread):
     send_img = pyqtSignal(np.ndarray)
-    send_raw = pyqtSignal(np.ndarray)
 
     def __int__(self):
         super(DetThread, self).__int__()
+        self.running = True   # break the while loop if True
         self.source = '0'            # default input source is webcam
         self.riskFlag = False        # trigger the risk event processing
 
@@ -65,6 +65,7 @@ class DetThread(QThread):
             half=False,  # use FP16 half-precision inference
             dnn=False,  # use OpenCV DNN for ONNX inference
     ):
+
         source = str(self.source)  # 'python detect.py --source data\\images\\bus.jpg'
         save_img = not nosave and not source.endswith('.txt')  # save inference images
         is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
@@ -102,6 +103,7 @@ class DetThread(QThread):
         count = 0
 
         for path, im, im0s, vid_cap, s in dataset:
+
             t1 = time_sync()
             im = torch.from_numpy(im).to(device)
             im = im.half() if model.fp16 else im.float()  # uint8 to fp16/32
@@ -172,7 +174,7 @@ class DetThread(QThread):
                 # TODO handle the detected risk
                 if 'wearing hardhat' in s:
                     count = count + 1
-                    print('got it')
+
                 else:
                     count = 0
 
@@ -212,16 +214,6 @@ class DetThread(QThread):
             # Print time (inference-only)
             LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
 
-        # Print results
-        t = tuple(x / seen * 1E3 for x in dt)  # speeds per image
-        LOGGER.info(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {(1, 3, *imgsz)}' % t)
-        if save_txt or save_img:
-            s = f"\n{len(list(save_dir.glob('labels/*.txt')))} labels saved to {save_dir / 'labels'}" if save_txt else ''
-            LOGGER.info(f"Results saved to {colorstr('bold', save_dir)}{s}")
-        if update:
-            strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
-
-
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -229,10 +221,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
 
+
+        self.pushButton_start.clicked.connect(self.start_detection)
+        self.pushButton_stop.clicked.connect(self.stop_detection)
+
+
+
+
+
+    def start_detection(self):
         self.det_thread = DetThread()
-        self.det_thread.source = '0'
         self.det_thread.send_img.connect(lambda x: self.show_image(x, self.label_videoPlaceHolder))
+        self.det_thread.source = '0'
+
         self.det_thread.start()
+
+
+
+    def stop_detection(self):
+        self.det_thread.terminate()
+        self.det_thread.send_img.connect(lambda x: self.show_image(x, self.label_videoPlaceHolder))
+
 
 
     @staticmethod
@@ -241,8 +250,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ih, iw, _ = img_src.shape
             w = label.geometry().width()
             h = label.geometry().height()
-            # 保持纵横比
-            # 找出长边
+
+            # keep the ratio
             if iw > ih:
                 scal = w / iw
                 nw = w
