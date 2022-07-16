@@ -32,12 +32,14 @@ class DetThread(QThread):
 
     def __int__(self):
         super(DetThread, self).__int__()
-        self.running = True   # break the while loop if True
+        # self.running = True   # break the while loop if True
         self.source = '0'            # default input source is webcam
-        self.riskFlag = False        # trigger the risk event processing
+        # self.riskFlag = False        # trigger the risk event processing
+
 
     @torch.no_grad()
     def run(self,
+            riskFlag = False,
             weights='../yolov5/runs/train/exp4/weights/best.pt',  # model.pt path(s)
             # source=ROOT / 'data/images',  # file/dir/URL/glob, 0 for webcam
             data=ROOT / 'dataset.yaml',  # dataset.yaml path
@@ -56,8 +58,8 @@ class DetThread(QThread):
             augment=False,  # augmented inference
             visualize=False,  # visualize features
             update=False,  # update all models
-            project=ROOT / 'runs/detect',  # save results to project/name
-            name='exp',  # save results to project/name
+            project=ROOT / 'riskEvents',  # save risk events to project/name
+            name='risk',  # save results to project/name
             exist_ok=False,  # existing project/name ok, do not increment
             line_thickness=3,  # bounding box thickness (pixels)
             hide_labels=False,  # hide labels
@@ -75,8 +77,8 @@ class DetThread(QThread):
             source = check_file(source)  # download
 
         # Directories - save to runs/detect/exp*
-        save_dir = increment_path(Path(project) / name, exist_ok=exist_ok)  # increment run
-        (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
+        save_dir = increment_path(Path(project) / name, exist_ok=exist_ok)  # increment risk folder risk2...
+        # (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
 
         # Load model
         device = select_device(device)
@@ -136,7 +138,7 @@ class DetThread(QThread):
                     p, im0, frame = path, im0s.copy(), getattr(dataset, 'frame', 0)
 
                 p = Path(p)  # to Path
-                save_path = str(save_dir / p.name)  # im.jpg
+                # save_path = str(save_dir / p.name)  # im.jpg
                 txt_path = str(save_dir / 'labels' / p.stem) + (
                     '' if dataset.mode == 'image' else f'_{frame}')  # im.txt
                 s += '%gx%g ' % im.shape[2:]  # print string
@@ -165,24 +167,6 @@ class DetThread(QThread):
                             c = int(cls)  # integer class
                             label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
                             annotator.box_label(xyxy, label, color=colors(c, True))
-                        # if save_crop:
-                        #     save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
-
-
-
-
-                # TODO handle the detected risk
-                if 'wearing hardhat' in s:
-                    count = count + 1
-
-                else:
-                    count = 0
-
-                print(count)
-
-                if count > 100:
-                    self.riskFlag = True
-                    count = 0
 
 
                 # Stream results & send the rendered video to Qt slot
@@ -192,24 +176,35 @@ class DetThread(QThread):
                     self.send_img.emit(im0)
                     cv2.waitKey(1)  # 1 millisecond
 
-                # Save results (image with detections)
-                if save_img:
-                    if dataset.mode == 'image':
-                        cv2.imwrite(save_path, im0)
-                    else:  # 'video' or 'stream'
-                        if vid_path[i] != save_path:  # new video
-                            vid_path[i] = save_path
-                            if isinstance(vid_writer[i], cv2.VideoWriter):
-                                vid_writer[i].release()  # release previous video writer
-                            if vid_cap:  # video
-                                fps = vid_cap.get(cv2.CAP_PROP_FPS)
-                                w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-                                h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-                            else:  # stream
-                                fps, w, h = 30, im0.shape[1], im0.shape[0]
-                            save_path = str(Path(save_path).with_suffix('.mp4'))  # force *.mp4 suffix on results videos
-                            vid_writer[i] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
-                        vid_writer[i].write(im0)
+
+                # Determine the risk situation exists more than 3 seconds or not
+                # Use a array to hold all the risk labels later
+                if 'non hardhat wearing' in s:
+                    count = count + 1
+                else:
+                    count = 0
+                print(count)
+
+                if count > 100:
+                    riskFlag = True
+                    count = 0
+
+
+                # Save risk results (image with detections)
+                if riskFlag:
+                    save_dir = increment_path(Path(project) / name, exist_ok=exist_ok)  # increment risk folder risk2...
+                    # create the folder
+                    os.mkdir(save_dir)
+                    path = str(save_dir / 'picture.jpg')  # im.jpg
+
+                    # save the risk picture
+                    cv2.imwrite(path, im0)
+
+                    # with open('readme.txt', 'w') as f:
+                    #     f.write('Create a new text file!')
+                    riskFlag = False
+                    count = 0
+
 
             # Print time (inference-only)
             LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
