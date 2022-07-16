@@ -1,5 +1,10 @@
+import time
+from datetime import datetime
+
 import numpy as np
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMenu, QAction
+from PIL.Image import Image
+from PyQt5 import QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMenu, QAction, QTableWidgetItem
 from gui.UI_v1 import Ui_MainWindow
 from PyQt5.QtCore import Qt, QPoint, QTimer, QThread, pyqtSignal
 from PyQt5.QtGui import QImage, QPixmap, QPainter, QIcon
@@ -28,20 +33,23 @@ from utils.torch_utils import select_device, time_sync
 
 
 class DetThread(QThread):
+
     send_img = pyqtSignal(np.ndarray)
+    update_data = pyqtSignal()
+    jump_out = False
 
     def __int__(self):
         super(DetThread, self).__int__()
-        # self.running = True   # break the while loop if True
+        self.running = True   # break the while loop if True
         self.source = '0'            # default input source is webcam
-        # self.riskFlag = False        # trigger the risk event processing
+
 
 
     @torch.no_grad()
     def run(self,
+            running=True,  # break the while loop if True
             riskFlag = False,
             weights='../yolov5/runs/train/exp4/weights/best.pt',  # model.pt path(s)
-            # source=ROOT / 'data/images',  # file/dir/URL/glob, 0 for webcam
             data=ROOT / 'dataset.yaml',  # dataset.yaml path
             imgsz=(640, 640),  # inference size (height, width)
             conf_thres=0.25,  # confidence threshold
@@ -66,9 +74,11 @@ class DetThread(QThread):
             hide_conf=False,  # hide confidences
             half=False,  # use FP16 half-precision inference
             dnn=False,  # use OpenCV DNN for ONNX inference
-    ):
+            ):
 
-        source = str(self.source)  # 'python detect.py --source data\\images\\bus.jpg'
+
+
+        source = str(self.source)
         save_img = not nosave and not source.endswith('.txt')  # save inference images
         is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
         is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://'))
@@ -104,8 +114,17 @@ class DetThread(QThread):
         # count the risk label
         count = 0
 
-        for path, im, im0s, vid_cap, s in dataset:
 
+        dataset = iter(dataset)
+
+        while True:
+
+            if self.jump_out:
+                dataset = None
+                break
+
+            path, im, im0s, vid_cap, s = next(dataset)
+            # print(self.check)
             t1 = time_sync()
             im = torch.from_numpy(im).to(device)
             im = im.half() if model.fp16 else im.float()  # uint8 to fp16/32
@@ -178,7 +197,7 @@ class DetThread(QThread):
 
 
                 # Determine the risk situation exists more than 3 seconds or not
-                # Use a array to hold all the risk labels later
+                # Use an array to hold all the risk labels later
                 if 'non hardhat wearing' in s:
                     count = count + 1
                 else:
@@ -200,14 +219,23 @@ class DetThread(QThread):
                     # save the risk picture
                     cv2.imwrite(path, im0)
 
-                    # with open('readme.txt', 'w') as f:
-                    #     f.write('Create a new text file!')
+                    # Get the current date & time
+                    now = datetime.now()
+                    current_date = now.strftime("%Y:%m:%d")
+                    current_time = now.strftime("%H:%M:%S")
+
+                    # write the date & time into a text file
+                    with open(save_dir / 'riskInfo.txt', 'w') as f:
+                        f.write('non hardhat wearing,' + current_date + ',' + current_time )
+
                     riskFlag = False
                     count = 0
+                    self.update_data.emit()
 
 
             # Print time (inference-only)
             LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
+
 
 
 
@@ -216,26 +244,57 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
 
+        self.det_thread = DetThread()
+        self.det_thread.update_data.connect(self.load_risk_events_data_table)
+
 
         self.pushButton_start.clicked.connect(self.start_detection)
         self.pushButton_stop.clicked.connect(self.stop_detection)
+        self.det_thread.send_img.connect(lambda x: self.show_image(x, self.label_videoPlaceHolder))
+        self.load_risk_events_data_table()
 
+
+
+
+    def load_risk_events_data_table(self):
+        self.tableWidget_eventDisplaySection.clear()
+        while(self.tableWidget_eventDisplaySection.rowCount() > 0):
+            self.tableWidget_eventDisplaySection.removeRow(0)
+        # assign directory
+        directory = "../yolov5/riskEvents"
+        # iterate over files in
+        # that directory
+        files = Path(directory).glob('*')
+        for file in files:
+
+            if str(file)[-1] == 'k':
+                i = 0
+            else: i = int(str(file)[-1]) - 1
+
+            pic = str(file) + '\picture.jpg'
+            label = QtWidgets.QLabel()
+            label.setText("")
+            label.setScaledContents(True)
+            pixmap = QtGui.QPixmap(pic)
+            label.setPixmap(pixmap)
+            self.tableWidget_eventDisplaySection.insertRow(i)
+            self.tableWidget_eventDisplaySection.setCellWidget(i,0,label)
 
 
 
 
     def start_detection(self):
-        self.det_thread = DetThread()
-        self.det_thread.send_img.connect(lambda x: self.show_image(x, self.label_videoPlaceHolder))
-        self.det_thread.source = '0'
-
-        self.det_thread.start()
+        self.det_thread.jump_out = False
+        if not self.det_thread.isRunning():
+            self.det_thread.source = '0'
+            self.det_thread.start()
 
 
 
     def stop_detection(self):
-        self.det_thread.terminate()
-        self.det_thread.send_img.connect(lambda x: self.show_image(x, self.label_videoPlaceHolder))
+        # self.det_thread.terminate()
+        # self.det_thread.send_img.connect(lambda x: self.show_image(x, self.label_videoPlaceHolder))
+        self.det_thread.jump_out = True
 
 
 
@@ -264,8 +323,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                          QImage.Format_RGB888)
             label.setPixmap(QPixmap.fromImage(img))
 
+
         except Exception as e:
             print(repr(e))
+
+
+
+# class ThreadTable(QThread):
+#     update_data = pyqtSignal()
+#
+#     def __int__(self,parent=None,*args,**kwargs):
+#         super(ThreadTable,self).__init__(parent,*args,**kwargs)
+#
+#     def run(self):
+#         cnt = 0
+#         while True:
+#             cnt += 1
+#             self.update_data.emit()
+#             time.sleep(3)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
