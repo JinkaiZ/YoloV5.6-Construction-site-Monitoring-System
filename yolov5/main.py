@@ -18,6 +18,8 @@ from pathlib import Path
 import torch
 import torch.backends.cudnn as cudnn
 
+from yolov5.gui.EventUI_v1 import Ui_Form
+
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
 if str(ROOT) not in sys.path:
@@ -262,8 +264,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
 
+    def open_detail_event(self,row):
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_Form()
+        self.ui.setupUi(self.window)
+
+        if row == 0:
+            pic = '../yolov5/riskEvents/risk/picture.jpg'
+        else:
+            row = row + 1
+            pic = '../yolov5/riskEvents/risk' + str(row) + '/picture.jpg'
+
+
+        self.ui.label_imagePlaceHolder.setScaledContents(True)
+        pixmap = QtGui.QPixmap(pic)
+        self.ui.label_imagePlaceHolder.setPixmap(pixmap)
+        self.window.show()
+
     def event_detail(self):
         row = self.tableWidget_eventDisplaySection.currentIndex().row()
+        self.open_detail_event(row)
 
 
     def load_risk_events_data_table(self):
