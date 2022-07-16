@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1112</width>
-    <height>708</height>
+    <width>1270</width>
+    <height>737</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,13 +19,16 @@
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>1071</width>
+      <width>1231</width>
       <height>641</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_mainWindow" stretch="7,3">
+      <layout class="QHBoxLayout" name="horizontalLayout_mainWindow" stretch="8,4">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_videoSection" stretch="1,6,3">
          <item>
@@ -119,6 +122,11 @@
              <string>Time</string>
             </property>
            </column>
+           <column>
+            <property name="text">
+             <string>Date</string>
+            </property>
+           </column>
           </widget>
          </item>
         </layout>
@@ -133,7 +141,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1112</width>
+     <width>1270</width>
      <height>21</height>
     </rect>
    </property>

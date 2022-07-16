@@ -247,6 +247,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.det_thread = DetThread()
         self.det_thread.update_data.connect(self.load_risk_events_data_table)
 
+        self.tableWidget_eventDisplaySection.setColumnWidth(0,70)
+        self.tableWidget_eventDisplaySection.setColumnWidth(1, 120)
+        self.tableWidget_eventDisplaySection.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tableWidget_eventDisplaySection.doubleClicked.connect(self.event_detail)
+
+
+
 
         self.pushButton_start.clicked.connect(self.start_detection)
         self.pushButton_stop.clicked.connect(self.stop_detection)
@@ -255,9 +262,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
 
+    def event_detail(self):
+        row = self.tableWidget_eventDisplaySection.currentIndex().row()
+
 
     def load_risk_events_data_table(self):
-        self.tableWidget_eventDisplaySection.clear()
         while(self.tableWidget_eventDisplaySection.rowCount() > 0):
             self.tableWidget_eventDisplaySection.removeRow(0)
         # assign directory
@@ -270,7 +279,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if str(file)[-1] == 'k':
                 i = 0
             else: i = int(str(file)[-1]) - 1
-
+            # load picture
             pic = str(file) + '\picture.jpg'
             label = QtWidgets.QLabel()
             label.setText("")
@@ -278,7 +287,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pixmap = QtGui.QPixmap(pic)
             label.setPixmap(pixmap)
             self.tableWidget_eventDisplaySection.insertRow(i)
+            self.tableWidget_eventDisplaySection.setRowHeight(i,50)
             self.tableWidget_eventDisplaySection.setCellWidget(i,0,label)
+
+            label_path = str(file) + '\\riskInfo.txt'
+            with open(label_path) as f:
+                line = f.readlines()
+                label = line[0].split(',')[0]
+                time = line[0].split(',')[2]
+                date = line[0].split(',')[1]
+                self.tableWidget_eventDisplaySection.setItem(i,1,QtWidgets.QTableWidgetItem(label))
+                self.tableWidget_eventDisplaySection.setItem(i, 2, QtWidgets.QTableWidgetItem(time))
+                self.tableWidget_eventDisplaySection.setItem(i, 3, QtWidgets.QTableWidgetItem(date))
+
+
+
+
 
 
 
