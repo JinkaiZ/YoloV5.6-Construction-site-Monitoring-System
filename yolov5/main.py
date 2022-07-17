@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-
+from natsort import natsorted
 import numpy as np
 from PIL.Image import Image
 from PyQt5 import QtGui, QtWidgets
@@ -14,7 +14,7 @@ import argparse
 import os
 import sys
 from pathlib import Path
-
+from natsort import natsorted
 import torch
 import torch.backends.cudnn as cudnn
 
@@ -69,7 +69,7 @@ class DetThread(QThread):
             visualize=False,  # visualize features
             update=False,  # update all models
             project=ROOT / 'riskEvents',  # save risk events to project/name
-            name='risk',  # save results to project/name
+            name='0',  # save results to project/name
             exist_ok=False,  # existing project/name ok, do not increment
             line_thickness=3,  # bounding box thickness (pixels)
             hide_labels=False,  # hide labels
@@ -204,7 +204,7 @@ class DetThread(QThread):
                     count = count + 1
                 else:
                     count = 0
-                print(count)
+
 
                 if count > 100:
                     riskFlag = True
@@ -216,6 +216,7 @@ class DetThread(QThread):
                     save_dir = increment_path(Path(project) / name, exist_ok=exist_ok)  # increment risk folder risk2...
                     # create the folder
                     os.mkdir(save_dir)
+                    print(save_dir)
                     path = str(save_dir / 'picture.jpg')  # im.jpg
 
                     # save the risk picture
@@ -270,10 +271,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui.setupUi(self.window)
 
         if row == 0:
-            pic = '../yolov5/riskEvents/risk/picture.jpg'
+            pic = '../yolov5/riskEvents/0/picture.jpg'
         else:
-            row = row + 1
-            pic = '../yolov5/riskEvents/risk' + str(row) + '/picture.jpg'
+            row = row
+            pic = '../yolov5/riskEvents/0' + str(row) + '/picture.jpg'
 
 
         self.ui.label_imagePlaceHolder.setScaledContents(True)
@@ -285,7 +286,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         row = self.tableWidget_eventDisplaySection.currentIndex().row()
         self.open_detail_event(row)
 
-
     def load_risk_events_data_table(self):
         while(self.tableWidget_eventDisplaySection.rowCount() > 0):
             self.tableWidget_eventDisplaySection.removeRow(0)
@@ -293,14 +293,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         directory = "../yolov5/riskEvents"
         # iterate over files in
         # that directory
-        files = Path(directory).glob('*')
+        # files = Path(directory).glob('*')
+        files = sorted(os.listdir(directory), key=lambda x: (int(x)))
+        print(files)
+
         for file in files:
 
-            if str(file)[-1] == 'k':
-                i = 0
-            else: i = int(str(file)[-1]) - 1
+            i = int(file)
+
             # load picture
-            pic = str(file) + '\picture.jpg'
+            pic = directory + '/'+ str(file) + '/picture.jpg'
             label = QtWidgets.QLabel()
             label.setText("")
             label.setScaledContents(True)
@@ -310,7 +312,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.tableWidget_eventDisplaySection.setRowHeight(i,50)
             self.tableWidget_eventDisplaySection.setCellWidget(i,0,label)
 
-            label_path = str(file) + '\\riskInfo.txt'
+            label_path = directory + '/'+ str(file) + '/riskInfo.txt'
             with open(label_path) as f:
                 line = f.readlines()
                 label = line[0].split(',')[0]
@@ -319,11 +321,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.tableWidget_eventDisplaySection.setItem(i,1,QtWidgets.QTableWidgetItem(label))
                 self.tableWidget_eventDisplaySection.setItem(i, 2, QtWidgets.QTableWidgetItem(time))
                 self.tableWidget_eventDisplaySection.setItem(i, 3, QtWidgets.QTableWidgetItem(date))
-
-
-
-
-
 
 
 
@@ -372,19 +369,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             print(repr(e))
 
 
-
-# class ThreadTable(QThread):
-#     update_data = pyqtSignal()
-#
-#     def __int__(self,parent=None,*args,**kwargs):
-#         super(ThreadTable,self).__init__(parent,*args,**kwargs)
-#
-#     def run(self):
-#         cnt = 0
-#         while True:
-#             cnt += 1
-#             self.update_data.emit()
-#             time.sleep(3)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
