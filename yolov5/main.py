@@ -270,16 +270,34 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ui = Ui_Form()
         self.ui.setupUi(self.window)
 
+        # load picture
         if row == 0:
             pic = '../yolov5/riskEvents/0/picture.jpg'
+            label_path = '../yolov5/riskEvents/0/riskInfo.txt'
         else:
             row = row
             pic = '../yolov5/riskEvents/0' + str(row) + '/picture.jpg'
-
+            label_path = '../yolov5/riskEvents/0' + str(row) + '/riskInfo.txt'
 
         self.ui.label_imagePlaceHolder.setScaledContents(True)
         pixmap = QtGui.QPixmap(pic)
         self.ui.label_imagePlaceHolder.setPixmap(pixmap)
+
+        # load event title
+        event_no = row + 1
+        self.ui.label_title.setText('Risk Event - ' + str(event_no))
+
+        # load descriptions
+        with open(label_path) as f:
+            line = f.readlines()
+            event = line[0].split(',')[0]
+            time = line[0].split(',')[2]
+            date = line[0].split(',')[1]
+            self.ui.label_eventType.setText('The risk events ' + event + ' occurred')
+            self.ui.label_time.setText('Time: ' + time)
+            self.ui.label_date.setText('Date: ' + date)
+
+
         self.window.show()
 
     def event_detail(self):
