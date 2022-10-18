@@ -6,134 +6,525 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1270</width>
-    <height>737</height>
+    <width>1135</width>
+    <height>785</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="styleSheet">
+    <string notr="true">QWidget
+{
+
+	background: #F8F9F0;
+
+}</string>
+   </property>
+   <widget class="QLabel" name="label_Title">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>1231</width>
-      <height>641</height>
+      <x>170</x>
+      <y>0</y>
+      <width>518</width>
+      <height>68</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="spacing">
-      <number>6</number>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>518</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel
+{
+	font-size: 22px;
+	font-family: &quot;Ariali&quot;;
+	font-weight: bold;
+    color: rgb(255, 143, 6);
+}</string>
+    </property>
+    <property name="text">
+     <string>Construction Site Monitoring System</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_videoPlaceHolder">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>80</y>
+      <width>641</width>
+      <height>491</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel
+{
+	font-size: 18px;
+	font-family: &quot;Ariali&quot;;
+	font-weight: bold;
+ 		border-radius:9px;
+		background:#000000;
+color:rgb(0, 0, 0);
+}</string>
+    </property>
+    <property name="text">
+     <string>Video</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_RiskEvent">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>0</y>
+      <width>181</width>
+      <height>63</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel
+{
+	font-size: 20px;
+	font-family: &quot;Ariali&quot;;
+	font-weight: bold;
+    color: #000000;
+}</string>
+    </property>
+    <property name="text">
+     <string>Risk Events</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget_eventDisplaySection">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>60</y>
+      <width>401</width>
+      <height>611</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>420</width>
+      <height>800</height>
+     </size>
+    </property>
+    <column>
+     <property name="text">
+      <string>Picture</string>
      </property>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_mainWindow" stretch="8,4">
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_videoSection" stretch="1,6,3">
-         <item>
-          <widget class="QLabel" name="label_Title">
-           <property name="text">
-            <string>Construction site Monitoring System</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::AutoText</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_videoPlaceHolder">
-           <property name="text">
-            <string>Video</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QGridLayout" name="gridLayout_buttonSection">
-           <item row="1" column="1">
-            <widget class="QPushButton" name="pushButton_4">
-             <property name="text">
-              <string>Steam</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QPushButton" name="pushButton_2">
-             <property name="text">
-              <string>Camera</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QPushButton" name="pushButton_start">
-             <property name="text">
-              <string>Start</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QPushButton" name="pushButton_stop">
-             <property name="text">
-              <string>Stop</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QPushButton" name="pushButton_3">
-             <property name="text">
-              <string>Select Model</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QPushButton" name="pushButton">
-             <property name="text">
-              <string>Train new model</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_riskEventSection">
-         <item>
-          <widget class="QLabel" name="label_RiskEvent">
-           <property name="text">
-            <string>Risk Event</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QTableWidget" name="tableWidget_eventDisplaySection">
-           <column>
-            <property name="text">
-             <string>Picture</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Event</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Time</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Date</string>
-            </property>
-           </column>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-    </layout>
+    </column>
+    <column>
+     <property name="text">
+      <string>Event</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Time</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Date</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QComboBox" name="modelSelectionComboBox">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>580</y>
+      <width>201</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>35</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QComboBox QAbstractItemView {
+font-family: &quot;Arial&quot;;
+font-size: 20px;
+background:rgba(200, 200, 200,150);
+selection-background-color: rgba(200, 200, 200,50);
+color: #000000;
+outline:none;
+border:none;}
+QComboBox{
+font-family: &quot;Arial&quot;;
+font-size: 20px;
+color: #000000;
+border-width:0px;
+border-color:white;
+border-style:solid;
+background-color: rgba(200, 200, 200,0);}
+
+QComboBox::drop-down {
+margin-top:8;
+height:20;
+background: rgba(200, 200, 200,0);
+}
+</string>
+    </property>
+    <property name="currentText">
+     <string>yolov5s.pt</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>yolov5s.pt</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>yolov5m.pt</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>yolov5l.pt</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>yolov5x.pt</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>580</y>
+      <width>165</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>165</width>
+      <height>35</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>80</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel
+{
+	font-size: 18px;
+	font-family: &quot;Ariali&quot;;
+	font-weight: bold;
+ 		border-radius:9px;
+		background:rgba(66, 195, 255, 0);
+color:rgb(0, 0, 0);
+}
+</string>
+    </property>
+    <property name="text">
+     <string>Model Selection: </string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_start">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>630</y>
+      <width>231</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>35</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>300</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+
+
+	font-size: 18px;
+	font-family: &quot;Arial&quot;;
+	font-weight: bold;
+ 	border-radius:13px;
+	background: rgb(255, 143, 6);
+	color: #FFFFFF;
+}</string>
+    </property>
+    <property name="text">
+     <string>Start Detection</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_stop">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>630</y>
+      <width>231</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>35</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>300</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+
+
+	font-size: 18px;
+	font-family: &quot;Arial&quot;;
+	font-weight: bold;
+ 	border-radius:13px;
+	background: rgb(255, 143, 6);
+	color: #FFFFFF;
+}</string>
+    </property>
+    <property name="text">
+     <string>Stop Detection</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_sycwithdatabase">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>680</y>
+      <width>231</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>35</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>300</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+
+
+	font-size: 18px;
+	font-family: &quot;Arial&quot;;
+	font-weight: bold;
+ 	border-radius:13px;
+	background: rgb(255, 143, 6);
+	color: #FFFFFF;
+}</string>
+    </property>
+    <property name="text">
+     <string>Database Synch</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_trainModel">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>680</y>
+      <width>231</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>35</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>300</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+
+
+	font-size: 18px;
+	font-family: &quot;Arial&quot;;
+	font-weight: bold;
+ 	border-radius:13px;
+	background: rgb(255, 143, 6);
+	color: #FFFFFF;
+}</string>
+    </property>
+    <property name="text">
+     <string>Train Model</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_clearALL">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>690</y>
+      <width>241</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>35</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>300</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+
+
+	font-size: 18px;
+	font-family: &quot;Arial&quot;;
+	font-weight: bold;
+ 	border-radius:13px;
+	background: #EB1C1C;
+	color: #FFFFFF;
+}</string>
+    </property>
+    <property name="text">
+     <string>Clear ALL</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_Title_2">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>0</y>
+      <width>101</width>
+      <height>68</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>518</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel
+{
+	font-size: 25px;
+	font-family: &quot;Ariali&quot;;
+	font-weight: bold;
+    color:#000000;
+}</string>
+    </property>
+    <property name="text">
+     <string>YOLOv5 </string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -141,7 +532,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1270</width>
+     <width>1135</width>
      <height>21</height>
     </rect>
    </property>

@@ -1,5 +1,8 @@
+import glob
+import shutil
 import time
 from datetime import datetime
+from PIL import Image
 from natsort import natsorted
 import numpy as np
 from PIL.Image import Image
@@ -9,6 +12,9 @@ from gui.UI_v1 import Ui_MainWindow
 from PyQt5.QtCore import Qt, QPoint, QTimer, QThread, pyqtSignal
 from PyQt5.QtGui import QImage, QPixmap, QPainter, QIcon
 
+import pymysql
+import base64
+import constants
 
 import argparse
 import os
@@ -33,12 +39,24 @@ from utils.general import (LOGGER, check_file, check_img_size, check_imshow, che
 from utils.plots import Annotator, colors, save_one_box
 from utils.torch_utils import select_device, time_sync
 
+class TrainThread(QThread):
+    def __init__(self, parent=None):
+        super(TrainThread, self).__init__(parent)
+    def run(self):
+        os.system(
+            'cd ../yolov5 && python train.py --img 640 --batch 16 --epochs 10 --data dataset.yaml --weights yolov5s.pt --workers=2')
+
+
+
+
+
 
 class DetThread(QThread):
 
     send_img = pyqtSignal(np.ndarray)
     update_data = pyqtSignal()
     jump_out = False
+    currentWeight = '../yolov5/Trained models/Safety Vest.pt'
 
     def __int__(self):
         super(DetThread, self).__int__()
@@ -46,12 +64,11 @@ class DetThread(QThread):
         self.source = '0'            # default input source is webcam
 
 
-
     @torch.no_grad()
     def run(self,
             running=True,  # break the while loop if True
             riskFlag = False,
-            weights='../yolov5/runs/train/exp4/weights/best.pt',  # model.pt path(s)
+            weights='../yolov5/Trained models/Safety Hardhat.pt',  # model.pt path(s)
             data=ROOT / 'dataset.yaml',  # dataset.yaml path
             imgsz=(640, 640),  # inference size (height, width)
             conf_thres=0.25,  # confidence threshold
@@ -124,6 +141,13 @@ class DetThread(QThread):
             if self.jump_out:
                 dataset = None
                 break
+
+            if self.currentWeight != weights:
+                weights = self.currentWeight
+                device = select_device(device)
+                model = DetectMultiBackend(weights, device=device, dnn=dnn, data=data, fp16=half)  # data = dataset.yaml
+                stride, names, pt = model.stride, model.names, model.pt
+                imgsz = check_img_size(imgsz, s=stride)  # check image size
 
             path, im, im0s, vid_cap, s = next(dataset)
             # print(self.check)
@@ -200,7 +224,7 @@ class DetThread(QThread):
 
                 # Determine the risk situation exists more than 3 seconds or not
                 # Use an array to hold all the risk labels later
-                if 'non hardhat wearing' in s:
+                if 'non hardhat wearing' or 'non safety glass wearing' or 'non safety vest wearing ' in s:
                     count = count + 1
                 else:
                     count = 0
@@ -208,8 +232,14 @@ class DetThread(QThread):
 
                 if count > 100:
                     riskFlag = True
+                    # write the date & time into a text file
+                    if 'non hardhat wearing' in s:
+                        risk = 'non hardhat wearing,'
+                    if 'non safety glass wearing' in s:
+                        risk = 'non safety glass wearing,'
+                    if 'non safety vest wearing' in s:
+                        risk = 'non safety vest wearing,'
                     count = 0
-
 
                 # Save risk results (image with detections)
                 if riskFlag:
@@ -227,13 +257,56 @@ class DetThread(QThread):
                     current_date = now.strftime("%Y:%m:%d")
                     current_time = now.strftime("%H:%M:%S")
 
-                    # write the date & time into a text file
+
+
                     with open(save_dir / 'riskInfo.txt', 'w') as f:
-                        f.write('non hardhat wearing,' + current_date + ',' + current_time )
+                        f.write(risk + current_date + ',' + current_time)
+
 
                     riskFlag = False
                     count = 0
                     self.update_data.emit()
+
+                    # Upload risk result to SQL
+                    try:
+                        # Connect DB
+                        conn = pymysql.connect(
+                            host=constants.HOST, user=constants.USER, password=constants.PASSWORD,
+                            db=constants.TRAINING_DATA, charset=constants.ENCODING,
+                        )
+                        print("Connect to DB successfully！")
+
+                        # Use cursor that returns result in diciotnary format
+                        cursor = conn.cursor()
+
+                        # Read picture.jpg as binary data
+
+                        with open(path, 'rb') as f:
+                            image = f.read()
+                            image = base64.b64encode(image)
+
+                        riskTitle = risk.rstrip(risk[-1])
+                        print(riskTitle)
+                        title = riskTitle
+                        date = current_date
+                        time = current_time
+                        date_time_str = date + " " + time
+                        date_time_obj = datetime.strptime(date_time_str, '%Y:%m:%d %H:%M:%S')
+                        print(date_time_obj)
+
+                        cursor.execute(
+                        '''
+                        INSERT INTO hazard (TITLE, DESCRIPTION, DATE, IMAGE)
+                        VALUES (%s, %s, %s, %s)
+                        ''', (title, "The worker has " + riskTitle, date_time_obj, image))
+                        print("insert successfully")
+                        conn.commit()
+                        print("commit successfully")
+
+                        cursor.close()
+                    except Exception as e:
+                        print(e)
+
 
 
             # Print time (inference-only)
@@ -255,13 +328,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.tableWidget_eventDisplaySection.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tableWidget_eventDisplaySection.doubleClicked.connect(self.event_detail)
 
-
-
-
         self.pushButton_start.clicked.connect(self.start_detection)
         self.pushButton_stop.clicked.connect(self.stop_detection)
+        self.pushButton_clearALL.clicked.connect(self.clear_all)
+        self.pushButton_trainModel.clicked.connect(self.train_model)
         self.det_thread.send_img.connect(lambda x: self.show_image(x, self.label_videoPlaceHolder))
         self.load_risk_events_data_table()
+
+        # auto search the model
+        self.modelSelectionComboBox.clear()
+        self.pt_list = os.listdir('../yolov5/Trained models')
+        self.pt_list = [file for file in self.pt_list if file.endswith('.pt')]
+        self.modelSelectionComboBox.clear()
+        self.modelSelectionComboBox.addItems(self.pt_list)
 
 
 
@@ -304,6 +383,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         row = self.tableWidget_eventDisplaySection.currentIndex().row()
         self.open_detail_event(row)
 
+    def train_model(self):
+        self.train_thread = TrainThread()
+        self.train_thread.start()
+
+    def clear_all(self):
+        folder = '../yolov5/riskEvents'
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+        self.load_risk_events_data_table()
+
     def load_risk_events_data_table(self):
         while(self.tableWidget_eventDisplaySection.rowCount() > 0):
             self.tableWidget_eventDisplaySection.removeRow(0)
@@ -341,11 +437,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.tableWidget_eventDisplaySection.setItem(i, 3, QtWidgets.QTableWidgetItem(date))
 
 
-
     def start_detection(self):
         self.det_thread.jump_out = False
         if not self.det_thread.isRunning():
             self.det_thread.source = '0'
+            print(self.modelSelectionComboBox.currentText())
+            self.det_thread.currentWeight = '../yolov5/Trained models/' + self.modelSelectionComboBox.currentText()
             self.det_thread.start()
 
 

@@ -14,7 +14,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(514, 582)
+        Form.resize(510, 606)
+        Form.setStyleSheet("QWidget\n"
+"{\n"
+"\n"
+"    background: #F8F9F0;\n"
+"\n"
+"}")
         self.verticalLayoutWidget = QtWidgets.QWidget(Form)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 20, 471, 531))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
@@ -24,6 +30,13 @@ class Ui_Form(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.label_title = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_title.setStyleSheet("QLabel\n"
+"{\n"
+"    font-size: 20px;\n"
+"    font-family: \"Ariali\";\n"
+"    font-weight: bold;\n"
+"    color: #000000;\n"
+"}")
         self.label_title.setObjectName("label_title")
         self.horizontalLayout_2.addWidget(self.label_title)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
@@ -36,27 +49,70 @@ class Ui_Form(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.label_description = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_description.setStyleSheet("QLabel\n"
+"{\n"
+"    font-size: 15px;\n"
+"    font-family: \"Ariali\";\n"
+"    font-weight: bold;\n"
+"    color: #000000;\n"
+"}")
         self.label_description.setObjectName("label_description")
         self.verticalLayout_2.addWidget(self.label_description)
         self.label_eventType = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_eventType.setStyleSheet("QLabel\n"
+"{\n"
+"    font-size: 15px;\n"
+"    font-family: \"Ariali\";\n"
+"    font-weight: bold;\n"
+"    color: #000000;\n"
+"}")
         self.label_eventType.setObjectName("label_eventType")
         self.verticalLayout_2.addWidget(self.label_eventType)
         self.label_time = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_time.setStyleSheet("QLabel\n"
+"{\n"
+"    font-size: 15px;\n"
+"    font-family: \"Ariali\";\n"
+"    font-weight: bold;\n"
+"    color: #000000;\n"
+"}")
         self.label_time.setObjectName("label_time")
         self.verticalLayout_2.addWidget(self.label_time)
         self.label_date = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.label_date.setStyleSheet("QLabel\n"
+"{\n"
+"    font-size: 15px;\n"
+"    font-family: \"Ariali\";\n"
+"    font-weight: bold;\n"
+"    color: #000000;\n"
+"}")
         self.label_date.setObjectName("label_date")
         self.verticalLayout_2.addWidget(self.label_date)
-        self.pushButton_report = QtWidgets.QPushButton(self.verticalLayoutWidget)
-        self.pushButton_report.setObjectName("pushButton_report")
-        self.verticalLayout_2.addWidget(self.pushButton_report)
-        self.pushButton_delete = QtWidgets.QPushButton(self.verticalLayoutWidget)
-        self.pushButton_delete.setObjectName("pushButton_delete")
-        self.verticalLayout_2.addWidget(self.pushButton_delete)
         self.verticalLayout.addLayout(self.verticalLayout_2)
         self.verticalLayout.setStretch(0, 1)
         self.verticalLayout.setStretch(1, 6)
         self.verticalLayout.setStretch(2, 3)
+        self.pushButton_report = QtWidgets.QPushButton(Form)
+        self.pushButton_report.setGeometry(QtCore.QRect(120, 560, 266, 30))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButton_report.sizePolicy().hasHeightForWidth())
+        self.pushButton_report.setSizePolicy(sizePolicy)
+        self.pushButton_report.setMinimumSize(QtCore.QSize(0, 20))
+        self.pushButton_report.setMaximumSize(QtCore.QSize(266, 40))
+        self.pushButton_report.setStyleSheet("QPushButton\n"
+"{\n"
+"\n"
+"\n"
+"    font-size: 18px;\n"
+"    font-family: \"Arial\";\n"
+"    font-weight: bold;\n"
+"     border-radius:13px;\n"
+"    background: rgb(255, 143, 6);\n"
+"    color: #FFFFFF;\n"
+"}")
+        self.pushButton_report.setObjectName("pushButton_report")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -71,4 +127,13 @@ class Ui_Form(object):
         self.label_time.setText(_translate("Form", "Time"))
         self.label_date.setText(_translate("Form", "Date"))
         self.pushButton_report.setText(_translate("Form", "Report"))
-        self.pushButton_delete.setText(_translate("Form", "Delete"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
+    ui = Ui_Form()
+    ui.setupUi(Form)
+    Form.show()
+    sys.exit(app.exec_())

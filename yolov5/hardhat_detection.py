@@ -66,7 +66,7 @@ import time
 # cap.release()
 # cv2.destroyAllWindows()
 
-model = torch.hub.load('ultralytics/yolov5','custom', path='../yolov5/runs/train/exp4/weights/best.pt', force_reload=True)
+model = torch.hub.load('ultralytics/yolov5','custom', path='../yolov5/runs/train/exp6/weights/best.pt', force_reload=True)
 cap = cv2.VideoCapture(0)
 
 

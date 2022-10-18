@@ -14,58 +14,62 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1270, 737)
+        MainWindow.resize(1135, 785)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setStyleSheet("QWidget\n"
+"{\n"
+"\n"
+"    background: #F8F9F0;\n"
+"\n"
+"}")
         self.centralwidget.setObjectName("centralwidget")
-        self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 20, 1231, 641))
-        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setSpacing(6)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.horizontalLayout_mainWindow = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_mainWindow.setObjectName("horizontalLayout_mainWindow")
-        self.verticalLayout_videoSection = QtWidgets.QVBoxLayout()
-        self.verticalLayout_videoSection.setObjectName("verticalLayout_videoSection")
-        self.label_Title = QtWidgets.QLabel(self.horizontalLayoutWidget)
+        self.label_Title = QtWidgets.QLabel(self.centralwidget)
+        self.label_Title.setGeometry(QtCore.QRect(170, 0, 518, 68))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_Title.sizePolicy().hasHeightForWidth())
+        self.label_Title.setSizePolicy(sizePolicy)
+        self.label_Title.setMaximumSize(QtCore.QSize(518, 16777215))
+        self.label_Title.setStyleSheet("QLabel\n"
+"{\n"
+"    font-size: 22px;\n"
+"    font-family: \"Ariali\";\n"
+"    font-weight: bold;\n"
+"    color: rgb(255, 143, 6);\n"
+"}")
         self.label_Title.setTextFormat(QtCore.Qt.AutoText)
         self.label_Title.setObjectName("label_Title")
-        self.verticalLayout_videoSection.addWidget(self.label_Title)
-        self.label_videoPlaceHolder = QtWidgets.QLabel(self.horizontalLayoutWidget)
+        self.label_videoPlaceHolder = QtWidgets.QLabel(self.centralwidget)
+        self.label_videoPlaceHolder.setGeometry(QtCore.QRect(40, 80, 641, 491))
+        self.label_videoPlaceHolder.setStyleSheet("QLabel\n"
+"{\n"
+"    font-size: 18px;\n"
+"    font-family: \"Ariali\";\n"
+"    font-weight: bold;\n"
+"         border-radius:9px;\n"
+"        background:#000000;\n"
+"color:rgb(0, 0, 0);\n"
+"}")
         self.label_videoPlaceHolder.setObjectName("label_videoPlaceHolder")
-        self.verticalLayout_videoSection.addWidget(self.label_videoPlaceHolder)
-        self.gridLayout_buttonSection = QtWidgets.QGridLayout()
-        self.gridLayout_buttonSection.setObjectName("gridLayout_buttonSection")
-        self.pushButton_4 = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.gridLayout_buttonSection.addWidget(self.pushButton_4, 1, 1, 1, 1)
-        self.pushButton_2 = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.gridLayout_buttonSection.addWidget(self.pushButton_2, 1, 0, 1, 1)
-        self.pushButton_start = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.pushButton_start.setObjectName("pushButton_start")
-        self.gridLayout_buttonSection.addWidget(self.pushButton_start, 0, 0, 1, 1)
-        self.pushButton_stop = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.pushButton_stop.setObjectName("pushButton_stop")
-        self.gridLayout_buttonSection.addWidget(self.pushButton_stop, 0, 1, 1, 1)
-        self.pushButton_3 = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.gridLayout_buttonSection.addWidget(self.pushButton_3, 2, 0, 1, 1)
-        self.pushButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.pushButton.setObjectName("pushButton")
-        self.gridLayout_buttonSection.addWidget(self.pushButton, 2, 1, 1, 1)
-        self.verticalLayout_videoSection.addLayout(self.gridLayout_buttonSection)
-        self.verticalLayout_videoSection.setStretch(0, 1)
-        self.verticalLayout_videoSection.setStretch(1, 6)
-        self.verticalLayout_videoSection.setStretch(2, 3)
-        self.horizontalLayout_mainWindow.addLayout(self.verticalLayout_videoSection)
-        self.verticalLayout_riskEventSection = QtWidgets.QVBoxLayout()
-        self.verticalLayout_riskEventSection.setObjectName("verticalLayout_riskEventSection")
-        self.label_RiskEvent = QtWidgets.QLabel(self.horizontalLayoutWidget)
+        self.label_RiskEvent = QtWidgets.QLabel(self.centralwidget)
+        self.label_RiskEvent.setGeometry(QtCore.QRect(850, 0, 181, 63))
+        self.label_RiskEvent.setStyleSheet("QLabel\n"
+"{\n"
+"    font-size: 20px;\n"
+"    font-family: \"Ariali\";\n"
+"    font-weight: bold;\n"
+"    color: #000000;\n"
+"}")
         self.label_RiskEvent.setObjectName("label_RiskEvent")
-        self.verticalLayout_riskEventSection.addWidget(self.label_RiskEvent)
-        self.tableWidget_eventDisplaySection = QtWidgets.QTableWidget(self.horizontalLayoutWidget)
+        self.tableWidget_eventDisplaySection = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget_eventDisplaySection.setGeometry(QtCore.QRect(710, 60, 401, 611))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tableWidget_eventDisplaySection.sizePolicy().hasHeightForWidth())
+        self.tableWidget_eventDisplaySection.setSizePolicy(sizePolicy)
+        self.tableWidget_eventDisplaySection.setMaximumSize(QtCore.QSize(420, 800))
         self.tableWidget_eventDisplaySection.setObjectName("tableWidget_eventDisplaySection")
         self.tableWidget_eventDisplaySection.setColumnCount(4)
         self.tableWidget_eventDisplaySection.setRowCount(0)
@@ -77,14 +81,187 @@ class Ui_MainWindow(object):
         self.tableWidget_eventDisplaySection.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_eventDisplaySection.setHorizontalHeaderItem(3, item)
-        self.verticalLayout_riskEventSection.addWidget(self.tableWidget_eventDisplaySection)
-        self.horizontalLayout_mainWindow.addLayout(self.verticalLayout_riskEventSection)
-        self.horizontalLayout_mainWindow.setStretch(0, 8)
-        self.horizontalLayout_mainWindow.setStretch(1, 4)
-        self.horizontalLayout.addLayout(self.horizontalLayout_mainWindow)
+        self.modelSelectionComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.modelSelectionComboBox.setGeometry(QtCore.QRect(190, 580, 201, 35))
+        self.modelSelectionComboBox.setMinimumSize(QtCore.QSize(0, 35))
+        self.modelSelectionComboBox.setStyleSheet("QComboBox QAbstractItemView {\n"
+"font-family: \"Arial\";\n"
+"font-size: 20px;\n"
+"background:rgba(200, 200, 200,150);\n"
+"selection-background-color: rgba(200, 200, 200,50);\n"
+"color: #000000;\n"
+"outline:none;\n"
+"border:none;}\n"
+"QComboBox{\n"
+"font-family: \"Arial\";\n"
+"font-size: 20px;\n"
+"color: #000000;\n"
+"border-width:0px;\n"
+"border-color:white;\n"
+"border-style:solid;\n"
+"background-color: rgba(200, 200, 200,0);}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"margin-top:8;\n"
+"height:20;\n"
+"background: rgba(200, 200, 200,0);\n"
+"}\n"
+"")
+        self.modelSelectionComboBox.setObjectName("modelSelectionComboBox")
+        self.modelSelectionComboBox.addItem("")
+        self.modelSelectionComboBox.addItem("")
+        self.modelSelectionComboBox.addItem("")
+        self.modelSelectionComboBox.addItem("")
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setGeometry(QtCore.QRect(30, 580, 165, 35))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
+        self.label_3.setSizePolicy(sizePolicy)
+        self.label_3.setMinimumSize(QtCore.QSize(165, 35))
+        self.label_3.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.label_3.setStyleSheet("QLabel\n"
+"{\n"
+"    font-size: 18px;\n"
+"    font-family: \"Ariali\";\n"
+"    font-weight: bold;\n"
+"         border-radius:9px;\n"
+"        background:rgba(66, 195, 255, 0);\n"
+"color:rgb(0, 0, 0);\n"
+"}\n"
+"")
+        self.label_3.setObjectName("label_3")
+        self.pushButton_start = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_start.setGeometry(QtCore.QRect(30, 630, 231, 35))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButton_start.sizePolicy().hasHeightForWidth())
+        self.pushButton_start.setSizePolicy(sizePolicy)
+        self.pushButton_start.setMinimumSize(QtCore.QSize(0, 35))
+        self.pushButton_start.setMaximumSize(QtCore.QSize(300, 16777215))
+        self.pushButton_start.setMouseTracking(True)
+        self.pushButton_start.setStyleSheet("QPushButton\n"
+"{\n"
+"\n"
+"\n"
+"    font-size: 18px;\n"
+"    font-family: \"Arial\";\n"
+"    font-weight: bold;\n"
+"     border-radius:13px;\n"
+"    background: rgb(255, 143, 6);\n"
+"    color: #FFFFFF;\n"
+"}")
+        self.pushButton_start.setObjectName("pushButton_start")
+        self.pushButton_stop = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_stop.setGeometry(QtCore.QRect(400, 630, 231, 35))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButton_stop.sizePolicy().hasHeightForWidth())
+        self.pushButton_stop.setSizePolicy(sizePolicy)
+        self.pushButton_stop.setMinimumSize(QtCore.QSize(35, 0))
+        self.pushButton_stop.setMaximumSize(QtCore.QSize(300, 16777215))
+        self.pushButton_stop.setMouseTracking(True)
+        self.pushButton_stop.setStyleSheet("QPushButton\n"
+"{\n"
+"\n"
+"\n"
+"    font-size: 18px;\n"
+"    font-family: \"Arial\";\n"
+"    font-weight: bold;\n"
+"     border-radius:13px;\n"
+"    background: rgb(255, 143, 6);\n"
+"    color: #FFFFFF;\n"
+"}")
+        self.pushButton_stop.setObjectName("pushButton_stop")
+        self.pushButton_sycwithdatabase = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_sycwithdatabase.setGeometry(QtCore.QRect(30, 680, 231, 35))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButton_sycwithdatabase.sizePolicy().hasHeightForWidth())
+        self.pushButton_sycwithdatabase.setSizePolicy(sizePolicy)
+        self.pushButton_sycwithdatabase.setMinimumSize(QtCore.QSize(0, 35))
+        self.pushButton_sycwithdatabase.setMaximumSize(QtCore.QSize(300, 16777215))
+        self.pushButton_sycwithdatabase.setMouseTracking(True)
+        self.pushButton_sycwithdatabase.setStyleSheet("QPushButton\n"
+"{\n"
+"\n"
+"\n"
+"    font-size: 18px;\n"
+"    font-family: \"Arial\";\n"
+"    font-weight: bold;\n"
+"     border-radius:13px;\n"
+"    background: rgb(255, 143, 6);\n"
+"    color: #FFFFFF;\n"
+"}")
+        self.pushButton_sycwithdatabase.setObjectName("pushButton_sycwithdatabase")
+        self.pushButton_trainModel = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_trainModel.setGeometry(QtCore.QRect(400, 680, 231, 35))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButton_trainModel.sizePolicy().hasHeightForWidth())
+        self.pushButton_trainModel.setSizePolicy(sizePolicy)
+        self.pushButton_trainModel.setMinimumSize(QtCore.QSize(0, 35))
+        self.pushButton_trainModel.setMaximumSize(QtCore.QSize(300, 16777215))
+        self.pushButton_trainModel.setMouseTracking(True)
+        self.pushButton_trainModel.setStyleSheet("QPushButton\n"
+"{\n"
+"\n"
+"\n"
+"    font-size: 18px;\n"
+"    font-family: \"Arial\";\n"
+"    font-weight: bold;\n"
+"     border-radius:13px;\n"
+"    background: rgb(255, 143, 6);\n"
+"    color: #FFFFFF;\n"
+"}")
+        self.pushButton_trainModel.setObjectName("pushButton_trainModel")
+        self.pushButton_clearALL = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_clearALL.setGeometry(QtCore.QRect(800, 690, 241, 35))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButton_clearALL.sizePolicy().hasHeightForWidth())
+        self.pushButton_clearALL.setSizePolicy(sizePolicy)
+        self.pushButton_clearALL.setMinimumSize(QtCore.QSize(35, 0))
+        self.pushButton_clearALL.setMaximumSize(QtCore.QSize(300, 16777215))
+        self.pushButton_clearALL.setMouseTracking(True)
+        self.pushButton_clearALL.setStyleSheet("QPushButton\n"
+"{\n"
+"\n"
+"\n"
+"    font-size: 18px;\n"
+"    font-family: \"Arial\";\n"
+"    font-weight: bold;\n"
+"     border-radius:13px;\n"
+"    background: #EB1C1C;\n"
+"    color: #FFFFFF;\n"
+"}")
+        self.pushButton_clearALL.setObjectName("pushButton_clearALL")
+        self.label_Title_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_Title_2.setGeometry(QtCore.QRect(60, 0, 101, 68))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_Title_2.sizePolicy().hasHeightForWidth())
+        self.label_Title_2.setSizePolicy(sizePolicy)
+        self.label_Title_2.setMaximumSize(QtCore.QSize(518, 16777215))
+        self.label_Title_2.setStyleSheet("QLabel\n"
+"{\n"
+"    font-size: 25px;\n"
+"    font-family: \"Ariali\";\n"
+"    font-weight: bold;\n"
+"    color:#000000;\n"
+"}")
+        self.label_Title_2.setTextFormat(QtCore.Qt.AutoText)
+        self.label_Title_2.setObjectName("label_Title_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1270, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1135, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -97,15 +274,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label_Title.setText(_translate("MainWindow", "Construction site Monitoring System"))
+        self.label_Title.setText(_translate("MainWindow", "Construction Site Monitoring System"))
         self.label_videoPlaceHolder.setText(_translate("MainWindow", "Video"))
-        self.pushButton_4.setText(_translate("MainWindow", "Steam"))
-        self.pushButton_2.setText(_translate("MainWindow", "Camera"))
-        self.pushButton_start.setText(_translate("MainWindow", "Start"))
-        self.pushButton_stop.setText(_translate("MainWindow", "Stop"))
-        self.pushButton_3.setText(_translate("MainWindow", "Select Model"))
-        self.pushButton.setText(_translate("MainWindow", "Train new model"))
-        self.label_RiskEvent.setText(_translate("MainWindow", "Risk Event"))
+        self.label_RiskEvent.setText(_translate("MainWindow", "Risk Events"))
         item = self.tableWidget_eventDisplaySection.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Picture"))
         item = self.tableWidget_eventDisplaySection.horizontalHeaderItem(1)
@@ -114,3 +285,25 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Time"))
         item = self.tableWidget_eventDisplaySection.horizontalHeaderItem(3)
         item.setText(_translate("MainWindow", "Date"))
+        self.modelSelectionComboBox.setCurrentText(_translate("MainWindow", "yolov5s.pt"))
+        self.modelSelectionComboBox.setItemText(0, _translate("MainWindow", "yolov5s.pt"))
+        self.modelSelectionComboBox.setItemText(1, _translate("MainWindow", "yolov5m.pt"))
+        self.modelSelectionComboBox.setItemText(2, _translate("MainWindow", "yolov5l.pt"))
+        self.modelSelectionComboBox.setItemText(3, _translate("MainWindow", "yolov5x.pt"))
+        self.label_3.setText(_translate("MainWindow", "Model Selection: "))
+        self.pushButton_start.setText(_translate("MainWindow", "Start Detection"))
+        self.pushButton_stop.setText(_translate("MainWindow", "Stop Detection"))
+        self.pushButton_sycwithdatabase.setText(_translate("MainWindow", "Database Synch"))
+        self.pushButton_trainModel.setText(_translate("MainWindow", "Train Model"))
+        self.pushButton_clearALL.setText(_translate("MainWindow", "Clear ALL"))
+        self.label_Title_2.setText(_translate("MainWindow", "YOLOv5 "))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())

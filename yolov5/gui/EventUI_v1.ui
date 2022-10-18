@@ -6,12 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>514</width>
-    <height>582</height>
+    <width>510</width>
+    <height>606</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget
+{
+
+	background: #F8F9F0;
+
+}</string>
   </property>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
@@ -27,6 +35,15 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="label_title">
+        <property name="styleSheet">
+         <string notr="true">QLabel
+{
+	font-size: 20px;
+	font-family: &quot;Ariali&quot;;
+	font-weight: bold;
+    color: #000000;
+}</string>
+        </property>
         <property name="text">
          <string>Event - 1</string>
         </property>
@@ -49,6 +66,15 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QLabel" name="label_description">
+        <property name="styleSheet">
+         <string notr="true">QLabel
+{
+	font-size: 15px;
+	font-family: &quot;Ariali&quot;;
+	font-weight: bold;
+    color: #000000;
+}</string>
+        </property>
         <property name="text">
          <string>Description: </string>
         </property>
@@ -56,6 +82,15 @@
       </item>
       <item>
        <widget class="QLabel" name="label_eventType">
+        <property name="styleSheet">
+         <string notr="true">QLabel
+{
+	font-size: 15px;
+	font-family: &quot;Ariali&quot;;
+	font-weight: bold;
+    color: #000000;
+}</string>
+        </property>
         <property name="text">
          <string>Event Type</string>
         </property>
@@ -63,6 +98,15 @@
       </item>
       <item>
        <widget class="QLabel" name="label_time">
+        <property name="styleSheet">
+         <string notr="true">QLabel
+{
+	font-size: 15px;
+	font-family: &quot;Ariali&quot;;
+	font-weight: bold;
+    color: #000000;
+}</string>
+        </property>
         <property name="text">
          <string>Time</string>
         </property>
@@ -70,28 +114,67 @@
       </item>
       <item>
        <widget class="QLabel" name="label_date">
+        <property name="styleSheet">
+         <string notr="true">QLabel
+{
+	font-size: 15px;
+	font-family: &quot;Ariali&quot;;
+	font-weight: bold;
+    color: #000000;
+}</string>
+        </property>
         <property name="text">
          <string>Date</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_report">
-        <property name="text">
-         <string>Report</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_delete">
-        <property name="text">
-         <string>Delete</string>
         </property>
        </widget>
       </item>
      </layout>
     </item>
    </layout>
+  </widget>
+  <widget class="QPushButton" name="pushButton_report">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>560</y>
+     <width>266</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>20</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>266</width>
+     <height>40</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton
+{
+
+
+	font-size: 18px;
+	font-family: &quot;Arial&quot;;
+	font-weight: bold;
+ 	border-radius:13px;
+	background: rgb(255, 143, 6);
+	color: #FFFFFF;
+}</string>
+   </property>
+   <property name="text">
+    <string>Report</string>
+   </property>
   </widget>
  </widget>
  <resources/>
